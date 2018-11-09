@@ -1,88 +1,55 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import utils
 from timeit import default_timer as timer
-from utils import polynomial, plot_polynomial, polynomial_data, plot_linear, NUM_DIMENSIONS
 
-# Part 1: fit model with training data
 #grab data preprocesed time series data and sentiment data
+#format into column vectors
 
 
 #set of all x and y points 
 
-# inspect plot for SVA's of model
+# inspect plot for pattern
 plt.scatter(x, y, color='green')
 plt.title('SVA check')
 plt.show()
 
-#Part 2: Ordinary least squares
 
-#least_squares approximation
-def least_squares(x, y):
-    xTx = x.T.dot(x)
-    xTx_inv = np.linalg.inv(xTx)
-    w = xTx_inv.dot(x.T.dot(y))
-
-    y_hat = x.dot(w)
-    error = np.mean((y - y_hat) ** 2)
-    return w, error
-
-
-
-
-#How well does it work in other dimensions?
+#see how model fitts on different dimensions
 times = []
 errs = []
 for i in range(0, 10):
     plt.figure()
     plot_regression(x, y, i)
 
-#Maybe we can do better
-plot_regression(x, y, 20)
-
-plot_regression(x, y, 100)
-
 features_100 = polynomial_features(x, 100)
 features_100.shape
+
+#find smallest eigen value
 xTx = features_100.T.dot(features_100)
 eig, _ = np.linalg.eig(xTx)
 eig.min()
 
-#What happens if we sample new data?
-np.random.seed(124)
-x_new, y_new = polynomial_data(coeffs, 200)
 
-plt.scatter(x, y, color='green')
-plt.scatter(x_new, y_new, color='blue')
 
-#4-degree polynomial
-plt.figure(figsize=(20, 10))
-plt.subplot(121)
-plot_regression(x, y, 4)
-plt.subplot(122)
-plot_regression(x_new, y_new, 4)
+#Check for overfitting/underfitting on graph
 
-#20-degree polynomial
-plt.figure(figsize=(20, 10))
-plt.subplot(121)
-plot_regression(x, y, 20)
-plt.subplot(122)
-plot_regression(x_new, y_new, 20)
 
-#What happens if we have more data?
-x_big, y_big = polynomial_data(coeffs, 100000)
-plt.figure()
-plot_regression(x_big, y_big, 4)
-plt.figure()
-plot_regression(x_big, y_big, 20)
-plt.figure()
-plot_regression(x_big, y_big, 200)
 
-#Part 3: Polynomial features
 
+
+
+#tweak hyperparams so modesl is less affected by bad data
+
+
+
+
+#format features of a given sample x and degree order
 def polynomial_features(x, order):
     features = np.column_stack([x**i for i in range(0, order+1)])
     return features
 
+#plots a regression line given the set of points and the degree order
 def plot_regression(x, y, order):
     start = timer()
     features = polynomial_features(x, order)
@@ -92,13 +59,41 @@ def plot_regression(x, y, order):
     plot_polynomial(w)
     plt.title(f"Polynomial degree: {order}, error: {mse}, time: {end-start}")
 
-    #least_squares approximation
+    #least squares approximation for set of points
+    # x_hat = (A^t * A)^-1 A^T * b
 def least_squares(x, y):
-    xTx = x.T.dot(x)
-    xTx_inv = np.linalg.inv(xTx)
-    w = xTx_inv.dot(x.T.dot(y))
+    #take product with x and its transpose
+    dx = np.dot(x, x.T)
 
-    y_hat = x.dot(w)
+    #take the inverse of the product
+    dxinv = np.linalg.inv(dx)
+    dxy = np.dot(x, y.T)
+   
+    #calculate sol
+    w = np.dot(dxinv,dxy)
+
+    #calculate mean square error
+    y_hat = np.dot(x.T,w)
     error = np.mean((y - y_hat) ** 2)
     return w, error
 
+#use ridge regression to soften bias from noisy data
+#With linear algebra generalize to 
+# ∥β∥^2= βT⋅β = β⋅β = ∑(d i=1) β^2_i = dot product
+# l is hyperparameter we can tweak if needed
+def ridge_regression(x, y, l=1.0):
+    #start by taking dot product of x (β^2)
+    dx = np.dot(x, x.T)
+    
+    #add ID matrix to squared result
+    m1 = dx + l * np.eye(dx.shape[0])
+   
+    #get dot product of x on y
+    m2 = np.dot(x, y.T)
+   
+    #calculate sol
+    w = np.dot(np.linalg.inv(m1),m2)
+   
+    #calculate mean square error
+    err = np.mean((np.dot(x.T,w) - y) ** 2)
+    return w, err

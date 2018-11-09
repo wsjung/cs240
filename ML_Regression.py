@@ -39,7 +39,7 @@ eig.min()
 
 
 
-#tweak hyperparams so no outlier predictions
+#tweak hyperparams so modesl is less affected by bad data
 
 
 
