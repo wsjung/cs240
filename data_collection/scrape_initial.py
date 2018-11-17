@@ -57,8 +57,10 @@ response = browser.page_source
 browser.quit()
 print ("browser quit")
 
+# parse wih BeautifulSoup
 soup = BeautifulSoup(response, features="html.parser")
 
+# for each data row, strip all but the text
 for row in soup.find_all('tr', {'class' : 'BdT Bdc($c-fuji-grey-c) Ta(end) Fz(s) Whs(nw)'}):
 	#print (row.contents)
 	for col in row.contents:
