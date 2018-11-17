@@ -63,7 +63,7 @@ soup = BeautifulSoup(response, features="html.parser")
 # for each data row, strip all but the text
 for row in soup.find_all('tr', {'class' : 'BdT Bdc($c-fuji-grey-c) Ta(end) Fz(s) Whs(nw)'}):
 	#print (row.contents)
-	temp = "'"+row.contents[0].text+"'"
+	temp = "\"".append(row[0]).append("\",")
 	for i in range(2,len(row)):
-		temp = temp + "," + row.contents[i].text.replace(',','')
+		temp.append(row[i])
 	print(temp)
