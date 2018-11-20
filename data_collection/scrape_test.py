@@ -32,6 +32,7 @@ class TestScrapeFunctions(unittest.TestCase):
 	def test_stockURL_XRP(self):
 		self.assertEqual(scraper.stockURL(self.URL,'XRP'), self.URL_XRP)
 
+	# tests selenium browser automation
 	def test_selenium(self):
 		# init browser
 		browser = scraper.startBrowser()
@@ -53,6 +54,10 @@ class TestScrapeFunctions(unittest.TestCase):
 		# exit browser
 		browser.quit()
 
+	# test beautifulsoup html parsing
+	### currently does not work
+	### as there is no way to test dynamic source for a constantly updating webpage
+	### => test functionality of beautifulsoup. 
 	def test_bs(self):
 		with open('./test_page.html', 'r') as f:
 			res = f.read()
