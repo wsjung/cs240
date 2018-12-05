@@ -1,17 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import SwipeableViews from "react-swipeable-views";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import Zoom from "@material-ui/core/Zoom";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
-import UpIcon from "@material-ui/icons/KeyboardArrowUp";
 import green from "@material-ui/core/colors/green";
 
 function TabContainer(props) {
@@ -32,7 +26,7 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    width: 1000,
     position: "relative",
     minHeight: 200
   },
@@ -66,25 +60,6 @@ class FloatingActionButtonZoom extends React.Component {
       enter: theme.transitions.duration.enteringScreen,
       exit: theme.transitions.duration.leavingScreen
     };
-
-    /*const fabs = [
-      {
-        color: "primary",
-        className: classes.fab,
-        icon: <AddIcon />
-      },
-      {
-        color: "secondary",
-        className: classes.fab,
-        icon: <EditIcon />
-      },
-      {
-        color: "inherit",
-        className: classNames(classes.fab, classes.fabGreen),
-        icon: <UpIcon />
-      }
-    ];*/
-
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -97,6 +72,7 @@ class FloatingActionButtonZoom extends React.Component {
           >
             <Tab label="BTC" />
             <Tab label="BCH" />
+            <Tab label="EOS" />
             <Tab label="ETH" />
             <Tab label="XRP" />
           </Tabs>
@@ -108,6 +84,7 @@ class FloatingActionButtonZoom extends React.Component {
         >
           <TabContainer dir={theme.direction}>This is BTC</TabContainer>
           <TabContainer dir={theme.direction}>This is BCH</TabContainer>
+          <TabContainer dir={theme.direction}>This is EOS</TabContainer>
           <TabContainer dir={theme.direction}>This is ETH</TabContainer>
           <TabContainer dir={theme.direction}>This is XRP</TabContainer>
         </SwipeableViews>
